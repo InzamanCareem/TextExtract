@@ -1,4 +1,13 @@
+# Python virtual environment
 .venv/
+
+# IDEs
 .idea/
 
+# Tesseract
 tesseract/
+
+# Build / distribution
+build/
+dist/
+main.spec
