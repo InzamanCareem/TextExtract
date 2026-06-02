@@ -19,7 +19,8 @@ pytesseract.pytesseract.tesseract_cmd = tesseract_path
 class TextExtract:
     def __init__(self, root):
         self.root = root
-        self.root.title = "TextExtract"
+        self.root.title("TextExtract")
+        self.root.iconbitmap("icon.ico")
         self.root.geometry("600x600")
 
         self.image_frame = tk.Frame(root, width=400, height=200, relief="groove", bd=2)
