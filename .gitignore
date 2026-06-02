@@ -10,4 +10,4 @@ tesseract/
 # Build / distribution
 build/
 dist/
-main.spec
+TextExtract.spec
