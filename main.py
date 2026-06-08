@@ -94,7 +94,7 @@ class TextExtract:
 
     def copy_text(self):
         self.root.clipboard_clear()
-        self.root.clipboard_append(self.text_box.get().strip())
+        self.root.clipboard_append(self.text_box.get("1.0", tk.END).strip())
         self.root.update()
 
 
