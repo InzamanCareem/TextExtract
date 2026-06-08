@@ -55,8 +55,6 @@ class TextExtract:
         self.image_label.config(image=self.photo)
 
         text = self.grab_text_from_image(original_img)
-        # text = " ".join(text)
-        print(text)
 
         self.text_box.delete("1.0", tk.END)
         self.text_box.insert("1.0", text)
@@ -91,8 +89,6 @@ class TextExtract:
     def grab_text_from_image(self, img):
         result = self.reader.readtext(np.array(img), detail=1, paragraph=True, contrast_ths=0.1, adjust_contrast=0.5,
                                       text_threshold=0.75, low_text=0.4, link_threshold=0.4, mag_ratio=2)
-
-        print(result)
         result = sorted(result, key=lambda x: x[0][0][1])
         text = " ".join([r[1] for r in result])
         return text
