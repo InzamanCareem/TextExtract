@@ -3,17 +3,13 @@ from tkinter import filedialog
 from PIL import Image, ImageTk, ImageGrab
 import os
 import sys
-import pytesseract
+import easyocr
+import numpy as np
 
 
 def resource_path(relative_path):
     base_path = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(base_path, relative_path)
-
-
-tesseract_path = resource_path("tesseract\\tesseract.exe")
-
-pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
 
 class TextExtract:
@@ -46,6 +42,8 @@ class TextExtract:
 
         tk.Button(root, text="Copy Text", command=self.copy_text).pack(pady=5)
 
+        self.reader = easyocr.Reader(['en'], verbose=False)
+
     def display_image(self, img):
         original_img = img.copy()
         original_img = original_img.convert("L")
@@ -56,7 +54,9 @@ class TextExtract:
         self.photo = ImageTk.PhotoImage(display_img)
         self.image_label.config(image=self.photo)
 
-        text = TextExtract.grab_text_from_image(original_img).strip()
+        text = self.grab_text_from_image(original_img)
+        # text = " ".join(text)
+        print(text)
 
         self.text_box.delete("1.0", tk.END)
         self.text_box.insert("1.0", text)
@@ -88,9 +88,14 @@ class TextExtract:
     def set_status(self, message, color="red"):
         self.status_label.config(text=message, fg=color)
 
-    @staticmethod
-    def grab_text_from_image(img):
-        return pytesseract.image_to_string(img)
+    def grab_text_from_image(self, img):
+        result = self.reader.readtext(np.array(img), detail=1, paragraph=True, contrast_ths=0.1, adjust_contrast=0.5,
+                                      text_threshold=0.75, low_text=0.4, link_threshold=0.4, mag_ratio=2)
+
+        print(result)
+        result = sorted(result, key=lambda x: x[0][0][1])
+        text = " ".join([r[1] for r in result])
+        return text
 
     def copy_text(self):
         self.root.clipboard_clear()
